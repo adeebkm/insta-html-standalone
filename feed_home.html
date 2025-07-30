@@ -389,6 +389,15 @@
             height: 600px;
             object-fit: cover;
         }
+        
+        /* Mobile: Keep same height as desktop but crop with object-fit: cover */
+        @media (max-width: 480px) {
+            .astrokobi-video .post-video {
+                max-height: 600px;
+                height: 600px;
+                object-fit: cover;
+            }
+        }
 
         .custom-video-container {
             position: relative;
