@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Instagram Feed Study - Home</title>
     <style>
         * {
@@ -16,6 +16,7 @@
             background: #fafafa;
             color: #262626;
             line-height: 1.4;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         .app-container {
@@ -288,6 +289,21 @@
                 height: auto;
                 object-fit: contain !important;
                 margin-left: calc(-50vw + 50%);
+            }
+            
+            /* Account for home indicator/gesture bar */
+            .feed-container {
+                padding-bottom: env(safe-area-inset-bottom, 20px);
+            }
+            
+            .post {
+                margin-bottom: 20px;
+                border: none;
+                box-shadow: none;
+                width: 100vw;
+                margin-left: calc(-50vw + 50%);
+                background: #fff;
+                padding-bottom: env(safe-area-inset-bottom, 20px);
             }
             
             .post-media {
