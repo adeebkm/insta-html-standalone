@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Simulation Study</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #262626;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #8e8e93;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .simulation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .simulation-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .simulation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #0095f6;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #262626;
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: #8e8e93;
+            line-height: 1.4;
+        }
+
+        .instructions {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #1976d2;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            color: #424242;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Instagram Simulation Study</h1>
+        <p class="subtitle">Behavioral Research Platform</p>
+        
+        <div class="simulation-grid">
+            <a href="reels_carousel.html" class="simulation-card">
+                <span class="card-icon">🎬</span>
+                <div class="card-title">Reels with Carousel Ads</div>
+                <div class="card-description">TikTok-style reels with swipeable carousel advertisements</div>
+            </a>
+            
+            <a href="reels_video.html" class="simulation-card">
+                <span class="card-icon">📹</span>
+                <div class="card-title">Reels with Video Ads</div>
+                <div class="card-description">TikTok-style reels with autoplay video advertisements</div>
+            </a>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Study Instructions</h3>
+            <ul>
+                <li>Click on any simulation to begin the study session</li>
+                <li>Each page simulates a different Instagram experience</li>
+                <li>Scroll/swipe naturally through the content</li>
+                <li>No login or interaction tracking required</li>
+                <li>Ready for screen recording and behavioral analysis</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 

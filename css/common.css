@@ -1,0 +1,423 @@
+/* Common Styles for Instagram Simulation Study */
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Simple Container - No Phone Frame */
+.phone-container {
+    width: 375px;
+    max-width: 100%;
+    margin: 0 auto;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.phone-screen {
+    width: 100%;
+    background: #000;
+    position: relative;
+}
+
+/* Instagram Header */
+.ig-header {
+    background: #000;
+    border-bottom: 1px solid #333;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.ig-logo {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.header-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.header-icon {
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Post Styles */
+.post {
+    background: #000;
+    border-bottom: 1px solid #333;
+    margin-bottom: 0;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.username {
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+}
+
+.post-location {
+    font-size: 12px;
+    color: #999;
+}
+
+.post-more {
+    margin-left: auto;
+    font-size: 18px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Post Content */
+.post-content {
+    position: relative;
+    width: 100%;
+    background: #000;
+}
+
+.post-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.post-video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Post Actions */
+.post-actions {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.action-icon {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.action-icon:hover {
+    color: #ed4956;
+}
+
+.action-icon.liked {
+    color: #ed4956;
+}
+
+.save-icon {
+    margin-left: auto;
+}
+
+/* Post Engagement */
+.post-engagement {
+    padding: 0 16px 8px;
+}
+
+.likes-count {
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.post-caption {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.caption-username {
+    font-weight: 600;
+}
+
+.post-comments {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 4px;
+}
+
+.post-timestamp {
+    font-size: 12px;
+    color: #999;
+    text-transform: uppercase;
+}
+
+/* Carousel Styles */
+.carousel-container, .reel-carousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-track, .reel-carousel-track {
+    display: flex;
+    transition: transform 0.3s ease;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-slide, .reel-carousel-slide {
+    min-width: 100%;
+    width: 100%;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.carousel-image, .reel-carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-dots, .reel-carousel-dots {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+}
+
+.carousel-dot, .reel-carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.carousel-dot.active, .reel-carousel-dot.active {
+    background: #fff;
+}
+
+/* Reels Styles */
+.reels-container {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    background: #000;
+}
+
+.reels-container::-webkit-scrollbar {
+    display: none;
+}
+
+.reel {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.reel:first-child {
+    opacity: 1;
+    visibility: visible;
+}
+
+.reel.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.reel-page {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.reel-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.reel-overlay {
+    position: absolute;
+    right: 16px;
+    bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.reel-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.reel-action-icon {
+    width: 28px;
+    height: 28px;
+    color: #fff;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.reel-action-count {
+    font-size: 12px;
+    font-weight: 600;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.reel-info {
+    position: absolute;
+    bottom: 20px;
+    left: 16px;
+    right: 80px;
+    color: #fff;
+}
+
+.reel-username {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.reel-caption {
+    font-size: 14px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.reel-music {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.music-note {
+    font-size: 14px;
+}
+
+/* Ad Styles */
+.ad-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Scroll Container */
+.scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none;
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 400px) {
+    .phone-container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* Loading States */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: #8e8e93;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #dbdbdb;
+    border-top: 2px solid #0095f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+} 

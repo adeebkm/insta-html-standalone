@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Feed Study - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #fafafa;
+            color: #262626;
+            line-height: 1.4;
+        }
+
+        .app-container {
+            height: 100vh;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Home Page */
+        .home-page {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .home-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .home-subtitle {
+            font-size: 1.2rem;
+            color: #737373;
+            margin-bottom: 50px;
+            max-width: 600px;
+        }
+
+        .condition-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .condition-card {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            border-radius: 12px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .condition-card:hover {
+            transform: translateY(-5px);
+            border-color: #0095f6;
+            box-shadow: 0 10px 30px rgba(0, 149, 246, 0.2);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 20px;
+            color: #0095f6;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #262626;
+        }
+
+        .card-description {
+            color: #737373;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .card-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: #737373;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Feed Pages */
+        .feed-page {
+            display: none;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .feed-page.active {
+            display: flex;
+        }
+
+        .feed-container {
+            max-width: 470px;
+            margin: 0 auto;
+            background: #fff;
+            width: 100%;
+            height: 100vh;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            overflow-x: hidden;
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 480px) {
+            .feed-container {
+                max-width: 100vw;
+                width: 100vw;
+                margin: 0;
+            }
+        }
+
+        .feed-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .ig-header {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            border-bottom: 1px solid #dbdbdb;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .ig-logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #0095f6;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .back-button:hover {
+            background: rgba(0, 149, 246, 0.1);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .heart-icon, .messenger-icon {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: #262626;
+            stroke-width: 2;
+            cursor: pointer;
+        }
+
+        .messenger-icon {
+            fill: #262626;
+            stroke: none;
+        }
+
+        .posts-container {
+            /* Container for all dynamically generated posts */
+        }
+
+        .post {
+            border-bottom: 1px solid #262626;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            justify-content: space-between;
+            margin-bottom: 0;
+        }
+
+        .post-user {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 12px;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            padding: 2px;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .username {
+            font-weight: 600;
+            font-size: 14px;
+            color: #262626;
+        }
+
+        .post-location {
+            font-size: 12px;
+            color: #737373;
+            margin-top: 2px;
+        }
+
+        .post-more {
+            color: #262626;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .post-media {
+            width: 100%;
+            position: relative;
+        }
+
+        .post-image, .post-video {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-width: 100%;
+        }
+
+        .post-video {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+        }
+
+        /* Mobile responsive media */
+        @media (max-width: 480px) {
+            .post-image, .post-video {
+                width: 100vw;
+                max-width: 100vw;
+                height: auto;
+                object-fit: contain !important;
+                margin-left: calc(-50vw + 50%);
+            }
+            
+            .post-media {
+                width: 100vw;
+                margin-left: calc(-50vw + 50%);
+                overflow: hidden;
+            }
+            
+            .custom-video-container {
+                width: 100vw;
+                margin-left: calc(-50vw + 50%);
+            }
+            
+            .simple-carousel, .raptv-carousel {
+                width: 100vw;
+                height: auto !important;
+                margin-left: calc(-50vw + 50%);
+                background: transparent;
+            }
+            
+            .simple-carousel img, .raptv-carousel img {
+                width: 100vw !important;
+                max-width: 100vw !important;
+                height: auto !important;
+                object-fit: contain !important;
+                position: relative;
+            }
+            
+            .post {
+                margin-bottom: 20px;
+                border: none;
+                box-shadow: none;
+                width: 100vw;
+                margin-left: calc(-50vw + 50%);
+                background: #fff;
+            }
+            
+            .post-header, .post-actions, .likes-count, .post-caption, .post-comments, .post-timestamp {
+                margin-left: calc(50vw - 50%);
+                width: calc(100% - 32px);
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+        }
+
+        /* Specific styling for ad videos to prevent cropping */
+        .custom-video-container.ad-video {
+            width: 100%;
+        }
+        
+        .custom-video-container.ad-video .post-video {
+            width: 100%;
+            height: auto;
+            min-height: 750px;
+        }
+
+        /* Custom styling for astrokobi video to reduce height */
+        .astrokobi-video .post-video {
+            max-height: 400px;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .custom-video-container {
+            position: relative;
+            width: 100%;
+        }
+
+
+
+        .mute-toggle-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(100, 100, 100, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .mute-toggle-overlay.show {
+            opacity: 1;
+        }
+
+        .mute-toggle-icon {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: white;
+            stroke-width: 2;
+        }
+
+        .simple-carousel {
+            position: relative;
+            width: 100%;
+            height: 750px;
+            background: #fff;
+            overflow: hidden;
+            cursor: grab;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .simple-carousel:active {
+            cursor: grabbing;
+        }
+
+        .simple-carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none;
+            pointer-events: none;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+
+        .raptv-carousel {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: #000;
+            overflow: hidden;
+            cursor: grab;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .raptv-carousel:active {
+            cursor: grabbing;
+        }
+
+        .raptv-carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            pointer-events: none;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+
+        .simple-carousel img.active,
+        .raptv-carousel img.active {
+            display: block;
+        }
+
+        .simple-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+        }
+
+        .simple-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .simple-dot.active {
+            background: #fff;
+            transform: scale(1.3);
+        }
+
+        .ad-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .post-actions {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            gap: 16px;
+        }
+
+        .action-icon {
+            width: 24px;
+            height: 24px;
+            color: #262626;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .action-icon:active {
+            transform: scale(0.9);
+        }
+
+        .post-actions .action-icon:last-child {
+            margin-left: auto;
+        }
+
+        .likes-count {
+            font-weight: 600;
+            font-size: 14px;
+            padding: 0 16px 8px;
+            color: #262626;
+            margin-bottom: 4px;
+        }
+
+        .post-caption {
+            padding: 0 16px 8px;
+            font-size: 14px;
+            line-height: 1.4;
+            color: #262626;
+            margin-bottom: 4px;
+        }
+
+        .post-comments {
+            padding: 0 16px 8px;
+            font-size: 14px;
+            color: #737373;
+            cursor: pointer;
+            margin-bottom: 4px;
+        }
+
+        .post-timestamp {
+            padding: 0 16px 16px;
+            font-size: 10px;
+            color: #737373;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        /* Hidden template */
+        .post-template {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .home-title {
+                font-size: 2rem;
+            }
+            
+            .condition-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Home Page -->
+            <div class="home-page" id="homePage">
+                <h1 class="home-title">Instagram Feed Study</h1>
+                <p class="home-subtitle">
+                    Choose a condition to begin your Instagram feed simulation. Each condition contains a mix of regular posts and advertisements.
+                </p>
+                
+                <div class="condition-cards">
+                    <div class="condition-card" onclick="showCarouselFeed()" style="cursor: pointer;">
+                        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21,15 16,10 5,21"/>
+                        </svg>
+                        <div class="card-title">Carousel Ads Condition</div>
+                        <div class="card-description">
+                            Experience Instagram feed with carousel advertisements. This condition includes multiple image carousels for ads.
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <span>📸</span>
+                                <span>5-6 Regular Posts</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>🎬</span>
+                                <span>2 Video Posts</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>📱</span>
+                                <span>2-3 Carousel Ads</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="condition-card" onclick="showVideoFeed()" style="cursor: pointer;">
+                        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="23,7 16,12 23,17 23,7"/>
+                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                        </svg>
+                        <div class="card-title">Video Ads Condition</div>
+                        <div class="card-description">
+                            Experience Instagram feed with video advertisements. This condition includes video ads instead of carousel ads.
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <span>📸</span>
+                                <span>5-6 Regular Posts</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>🎬</span>
+                                <span>2 Video Posts</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>🎥</span>
+                                <span>2-3 Video Ads</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Ads Feed -->
+            <div class="feed-page" id="carouselFeed">
+                <div class="feed-container">
+                    <div class="ig-header">
+                        <button class="back-button" onclick="showHome()">← Back</button>
+                        <div class="ig-logo">Instagram</div>
+                        <div class="header-icons">
+                            <svg class="heart-icon" viewBox="0 0 24 24">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                            <svg class="messenger-icon" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98.97 4.29L1 23l6.71-1.97C9.02 21.64 10.46 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.25 0-2.45-.2-3.57-.57L7 20l.57-1.43C7.2 17.45 7 16.25 7 15c0-2.76 2.24-5 5-5s5 2.24 5 5-2.24 5-5 5z"/>
+                                <path d="M8 10l3 3 5-5"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Hidden template for posts -->
+                    <div class="post-template" id="postTemplate">
+                        <div class="post">
+                            <div class="post-header">
+                                <div class="post-user">
+                                    <div class="profile-pic">
+                                        <img src="" alt="Profile">
+                                    </div>
+                                    <div>
+                                        <div class="username"></div>
+                                        <div class="post-location"></div>
+                                    </div>
+                                </div>
+                                <button class="post-more">⋯</button>
+                            </div>
+                            <div class="post-media">
+                                <!-- Content will be dynamically inserted here -->
+                            </div>
+                            <div class="post-actions">
+                                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                </svg>
+                                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                                </svg>
+                                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                                </svg>
+                            </div>
+                            <div class="likes-count"></div>
+                            <div class="post-caption"></div>
+                            <div class="post-comments"></div>
+                            <div class="post-timestamp"></div>
+                        </div>
+                    </div>
+
+                    <!-- Container where posts will be dynamically inserted -->
+                    <div class="posts-container" id="carouselPostsContainer">
+                        <!-- Posts will be generated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Ads Feed -->
+            <div class="feed-page" id="videoFeed">
+                <div class="feed-container">
+                    <div class="ig-header">
+                        <button class="back-button" onclick="showHome()">← Back</button>
+                        <div class="ig-logo">Instagram</div>
+                        <div class="header-icons">
+                            <svg class="heart-icon" viewBox="0 0 24 24">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                            <svg class="messenger-icon" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98.97 4.29L1 23l6.71-1.97C9.02 21.64 10.46 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.25 0-2.45-.2-3.57-.57L7 20l.57-1.43C7.2 17.45 7 16.25 7 15c0-2.76 2.24-5 5-5s5 2.24 5 5-2.24 5-5 5z"/>
+                                <path d="M8 10l3 3 5-5"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Hidden template for posts -->
+                    <div class="post-template" id="videoPostTemplate">
+                        <div class="post">
+                            <div class="post-header">
+                                <div class="post-user">
+                                    <div class="profile-pic">
+                                        <img src="" alt="Profile">
+                                    </div>
+                                    <div>
+                                        <div class="username"></div>
+                                        <div class="post-location"></div>
+                                    </div>
+                                </div>
+                                <button class="post-more">⋯</button>
+                            </div>
+                            <div class="post-media">
+                                <!-- Content will be dynamically inserted here -->
+                            </div>
+                            <div class="post-actions">
+                                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                </svg>
+                                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                                </svg>
+                                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                                </svg>
+                            </div>
+                            <div class="likes-count"></div>
+                            <div class="post-caption"></div>
+                            <div class="post-comments"></div>
+                            <div class="post-timestamp"></div>
+                        </div>
+                    </div>
+
+                    <!-- Container where posts will be dynamically inserted -->
+                    <div class="posts-container" id="videoPostsContainer">
+                        <!-- Posts will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data for Carousel Ads Feed (5-6 regular posts, 2 video posts, 2-3 carousel ads)
+        const carouselFeedData = [
+            {
+                id: 1,
+                type: 'image',
+                username: 'memezar',
+                location: '',
+                profilePic: 'assets/images/memezar.png',
+                media: 'assets/images/WhatsApp Image 2025-07-24 at 21.00.10.jpeg',
+                likes: '8,901',
+                caption: 'This is the way 🎭 #memezar #viral #trending',
+                comments: '432',
+                timestamp: '12 hours ago',
+                isAd: false
+            },
+            {
+                id: 2,
+                type: 'video',
+                username: 'astrokobi',
+                location: '',
+                profilePic: 'assets/images/astrokobi.jpeg',
+                media: 'assets/videos/WhatsApp Video 2025-07-25 at 00.19.58.mp4',
+                likes: '23,456',
+                caption: 'What if we put Solar Panels in Space 🌟 #astrokobi #space #science #solar',
+                comments: '1,234',
+                timestamp: '14 hours ago',
+                isAd: false
+            },
+            {
+                id: 3,
+                type: 'image',
+                username: 'saraaa_isabel',
+                location: 'Carlsbad, CA',
+                profilePic: 'assets/images/saraaa_isabelpfp.jpg',
+                media: 'assets/images/saraaa_isabel.jpg',
+                likes: '24,891',
+                caption: 'spring days at the flower fields 💐\n\n—\n\nflower fields, Carlsbad flower fields, spring outfit, spring outfit ideas, spring style, Pinterest inspired, Pinterest fashion, Pinterest aesthetic',
+                comments: '1,456',
+                timestamp: '8 hours ago',
+                isAd: false
+            },
+            {
+                id: 7,
+                type: 'image',
+                username: 'meme',
+                location: '',
+                profilePic: 'assets/images/memepfp.jpg',
+                media: 'assets/images/WhatsApp Image 2025-07-24 at 20.53.55.jpeg',
+                likes: '12,345',
+                caption: 'When you finally understand the assignment 😂 #meme #funny #relatable',
+                comments: '567',
+                timestamp: '11 hours ago',
+                isAd: false
+            },
+
+            {
+                id: 4,
+                type: 'carousel',
+                username: 'nyu_admissions',
+                location: 'Sponsored',
+                profilePic: 'assets/images/nyupfp.png',
+                media: [
+                    'assets/images/Exp-Images/NYU1.png',
+                    'assets/images/Exp-Images/NYU2.png',
+                    'assets/images/Exp-Images/NYU3.png'
+                ],
+                likes: '5,234',
+                caption: 'Discover your potential at NYU! 🎓 Transform your future with world-class education. #NYU #Education #Future',
+                comments: '234',
+                timestamp: '1 hour ago',
+                isAd: true
+            },
+            {
+                id: 5,
+                type: 'carousel',
+                username: 'rap',
+                location: 'Los Angeles, California',
+                profilePic: 'assets/images/raptvpfp.jpeg',
+                media: [
+                    'assets/images/raptv/WhatsApp Image 2025-07-25 at 02.01.39.jpeg',
+                    'assets/images/raptv/WhatsApp Image 2025-07-25 at 02.01.40.jpeg',
+                    'assets/images/raptv/WhatsApp Image 2025-07-25 at 02.01.40 (1).jpeg'
+                ],
+                likes: '1,234,567',
+                caption: 'Breaking: New album drops tonight 🔥 Who\'s ready? #hiphop #newmusic #exclusive',
+                comments: '45,678',
+                timestamp: '2 hours ago',
+                isAd: false
+            },
+            {
+                id: 6,
+                type: 'image',
+                username: 'bennycheng_',
+                location: 'New York, NY',
+                profilePic: 'assets/images/bennychengpfp.jpeg',
+                media: 'assets/images/bennycheng__.jpg',
+                likes: '15,642',
+                caption: 'City vibes and good times ✨ Living my best life in NYC #nyc #lifestyle #vibes',
+                comments: '892',
+                timestamp: '3 hours ago',
+                isAd: false
+            },
+
+
+
+            {
+                id: 10,
+                type: 'carousel',
+                username: 'stefanliebermann',
+                location: '',
+                profilePic: 'assets/images/stefanliebermannphotopfp.jpg',
+                media: [
+                    'assets/images/stefanliebermannphoto/WhatsApp Image 2025-07-25 at 14.17.45.jpeg',
+                    'assets/images/stefanliebermannphoto/WhatsApp Image 2025-07-25 at 14.17.46.jpeg',
+                    'assets/images/stefanliebermannphoto/WhatsApp Image 2025-07-25 at 14.17.46 (1).jpeg',
+                    'assets/images/stefanliebermannphoto/WhatsApp Image 2025-07-25 at 14.17.46 (2).jpeg'
+                ],
+                likes: '2,847',
+                caption: 'Capturing moments that tell stories 📸 #photography #art #moments',
+                comments: '156',
+                timestamp: '4 hours ago',
+                isAd: false
+            },
+            {
+                id: 12,
+                type: 'image',
+                username: 'maya.aesthetic',
+                location: 'Los Angeles, CA',
+                profilePic: 'assets/images/extrafill1.jpeg',
+                media: 'assets/images/extrafill1.jpeg',
+                likes: '8,456',
+                caption: 'Golden hour magic ✨ Sometimes you just need to pause and appreciate the beauty around you 🌅 #goldenhour #aesthetic #mood',
+                comments: '324',
+                timestamp: '6 hours ago',
+                isAd: false
+            },
+            {
+                id: 11,
+                type: 'carousel',
+                username: 'bbcnews',
+                location: '',
+                profilePic: 'assets/images/bbcnewspfp.png',
+                media: [
+                    'assets/images/bbcnews/1.jpeg',
+                    'assets/images/bbcnews/WhatsApp Image 2025-07-25 at 15.54.00.jpeg',
+                    'assets/images/bbcnews/2.jpeg',
+                    'assets/images/bbcnews/3.jpeg'
+                ],
+                likes: '45,678',
+                caption: 'Breaking: Latest updates on global developments 📰 #bbcnews #breaking #world',
+                comments: '2,345',
+                timestamp: '30 minutes ago',
+                isAd: false
+            },
+
+
+
+            {
+                id: 9,
+                type: 'carousel',
+                username: 'nyu_stern',
+                location: 'Sponsored',
+                profilePic: 'assets/images/nyupfp.png',
+                media: [
+                    'assets/images/Exp-Images/NYU Stern MBA_ Global Impact.png',
+                    'assets/images/Exp-Images/NYU4.png',
+                    'assets/images/Exp-Images/NYU1.png'
+                ],
+                likes: '3,456',
+                caption: 'NYU Stern MBA: Global Impact Starts Here 🌍 Join the next generation of business leaders! #NYUStern #MBA #Leadership',
+                comments: '189',
+                timestamp: '3 hours ago',
+                isAd: true
+            },
+            {
+                id: 16,
+                type: 'video',
+                username: 'sedyyfilms',
+                location: '',
+                profilePic: 'assets/images/sedyyfilmspfp.jpeg',
+                media: 'assets/videos/sedyyfilms.mp4',
+                likes: '34,567',
+                caption: 'pov: bro found this spot in LA',
+                comments: '1,234',
+                timestamp: '5 hours ago',
+                isAd: false
+            }
+        ];
+
+        // Data for Video Ads Feed (5-6 regular posts, 2 video posts, 2-3 video ads)
+        const videoFeedData = [
+            {
+                id: 1,
+                type: 'image',
+                username: 'memezar',
+                location: '',
+                profilePic: 'assets/images/memezar.png',
+                media: 'assets/images/WhatsApp Image 2025-07-24 at 21.00.10.jpeg',
+                likes: '8,901',
+                caption: 'This is the way 🎭 #memezar #viral #trending',
+                comments: '432',
+                timestamp: '12 hours ago',
+                isAd: false
+            },
+            {
+                id: 2,
+                type: 'video',
+                username: 'astrokobi',
+                location: '',
+                profilePic: 'assets/images/astrokobi.jpeg',
+                media: 'assets/videos/WhatsApp Video 2025-07-25 at 00.19.58.mp4',
+                likes: '23,456',
+                caption: 'What if we put Solar Panels in Space 🌟 #astrokobi #space #science #solar',
+                comments: '1,234',
+                timestamp: '14 hours ago',
+                isAd: false
+            },
+            {
+                id: 3,
+                type: 'image',
+                username: 'saraaa_isabel',
+                location: 'Carlsbad, CA',
+                profilePic: 'assets/images/saraaa_isabelpfp.jpg',
+                media: 'assets/images/saraaa_isabel.jpg',
+                likes: '24,891',
+                caption: 'spring days at the flower fields 💐\n\n—\n\nflower fields, Carlsbad flower fields, spring outfit, spring outfit ideas, spring style, Pinterest inspired, Pinterest fashion, Pinterest aesthetic',
+                comments: '1,456',
+                timestamp: '8 hours ago',
+                isAd: false
+            },
+            {
+                id: 8,
+                type: 'image',
+                username: 'meme',
+                location: '',
+                profilePic: 'assets/images/memepfp.jpg',
+                media: 'assets/images/WhatsApp Image 2025-07-24 at 20.53.55.jpeg',
+                likes: '12,345',
+                caption: 'When you finally understand the assignment 😂 #meme #funny #relatable',
+                comments: '567',
+                timestamp: '11 hours ago',
+                isAd: false
+            },
+            {
+                id: 4,
+                type: 'carousel',
+                username: 'rap',
+                location: 'Los Angeles, California',
+                profilePic: 'assets/images/raptvpfp.jpeg',
+                media: [
+                    'assets/images/raptv/WhatsApp Image 2025-07-25 at 02.01.39.jpeg',
+                    'assets/images/raptv/WhatsApp Image 2025-07-25 at 02.01.40.jpeg',
+                    'assets/images/raptv/WhatsApp Image 2025-07-25 at 02.01.40 (1).jpeg'
+                ],
+                likes: '1,234,567',
+                caption: 'Breaking: New album drops tonight 🔥 Who\'s ready? #hiphop #newmusic #exclusive',
+                comments: '45,678',
+                timestamp: '2 hours ago',
+                isAd: false
+            },
+            {
+                id: 6,
+                type: 'image',
+                username: 'bennycheng_',
+                location: 'New York, NY',
+                profilePic: 'assets/images/bennychengpfp.jpeg',
+                media: 'assets/images/bennycheng__.jpg',
+                likes: '15,642',
+                caption: 'City vibes and good times ✨ Living my best life in NYC #nyc #lifestyle #vibes',
+                comments: '892',
+                timestamp: '3 hours ago',
+                isAd: false
+            },
+
+            {
+                id: 5,
+                type: 'video',
+                username: 'nyu_admissions',
+                location: 'Sponsored',
+                profilePic: 'assets/images/nyupfp.png',
+                media: 'assets/videos/nyu ad 1.mp4',
+                likes: '1,234',
+                caption: 'NYU Admissions: Your future starts here! 🎓 #NYU #Admissions #Ad',
+                comments: '56',
+                timestamp: 'Just now',
+                isAd: true
+            },
+
+
+
+            {
+                id: 15,
+                type: 'carousel',
+                username: 'stefanliebermann',
+                location: '',
+                profilePic: 'assets/images/stefanliebermannphotopfp.jpg',
+                media: [
+                    'assets/images/stefanliebermannphoto/WhatsApp Image 2025-07-25 at 14.17.45.jpeg',
+                    'assets/images/stefanliebermannphoto/WhatsApp Image 2025-07-25 at 14.17.46.jpeg',
+                    'assets/images/stefanliebermannphoto/WhatsApp Image 2025-07-25 at 14.17.46 (1).jpeg',
+                    'assets/images/stefanliebermannphoto/WhatsApp Image 2025-07-25 at 14.17.46 (2).jpeg'
+                ],
+                likes: '2,847',
+                caption: 'Capturing moments that tell stories 📸 #photography #art #moments',
+                comments: '156',
+                timestamp: '4 hours ago',
+                isAd: false
+            },
+            {
+                id: 19,
+                type: 'image',
+                username: 'maya.aesthetic',
+                location: 'Los Angeles, CA',
+                profilePic: 'assets/images/extrafill1.jpeg',
+                media: 'assets/images/extrafill1.jpeg',
+                likes: '8,456',
+                caption: 'Golden hour magic ✨ Sometimes you just need to pause and appreciate the beauty around you 🌅 #goldenhour #aesthetic #mood',
+                comments: '324',
+                timestamp: '6 hours ago',
+                isAd: false
+            },
+            {
+                id: 16,
+                type: 'carousel',
+                username: 'bbcnews',
+                location: '',
+                profilePic: 'assets/images/bbcnewspfp.png',
+                media: [
+                    'assets/images/bbcnews/1.jpeg',
+                    'assets/images/bbcnews/WhatsApp Image 2025-07-25 at 15.54.00.jpeg',
+                    'assets/images/bbcnews/2.jpeg',
+                    'assets/images/bbcnews/3.jpeg'
+                ],
+                likes: '45,678',
+                caption: 'Breaking: Latest updates on global developments 📰 #bbcnews #breaking #world',
+                comments: '2,345',
+                timestamp: '30 minutes ago',
+                isAd: false
+            },
+            {
+                id: 14,
+                type: 'video',
+                username: 'nyu_global',
+                location: 'Sponsored',
+                profilePic: 'assets/images/nyupfp.png',
+                media: 'assets/videos/nyu ad 2.mp4',
+                likes: '1,098',
+                caption: 'Discover NYU: Opportunity awaits in NYC! 🗽 #NYU #Ad',
+                comments: '42',
+                timestamp: 'Just now',
+                isAd: true
+            },
+
+
+
+
+            {
+                id: 18,
+                type: 'video',
+                username: 'sedyyfilms',
+                location: '',
+                profilePic: 'assets/images/sedyyfilmspfp.jpeg',
+                media: 'assets/videos/sedyyfilms.mp4',
+                likes: '34,567',
+                caption: 'pov: bro found this spot in LA',
+                comments: '1,234',
+                timestamp: '5 hours ago',
+                isAd: false
+            }
+        ];
+
+        // Function to create simple carousel HTML
+        function createSimpleCarouselHTML(images, isAd, username = '') {
+            console.log('Creating simple carousel with images:', images);
+            
+            let imagesHTML = '';
+            let dotsHTML = '';
+            const isRap = username.toLowerCase().includes('rap');
+            const isStefan = username.toLowerCase().includes('stefanliebermann');
+            const isBbc = username.toLowerCase().includes('bbcnews');
+            const carouselClass = isRap ? 'raptv-carousel' : (isStefan ? 'raptv-carousel' : (isBbc ? 'raptv-carousel' : 'simple-carousel'));
+            
+            images.forEach((image, index) => {
+                imagesHTML += `<img src="${image}" alt="Carousel image ${index + 1}" class="${index === 0 ? 'active' : ''}" onload="console.log('Loaded:', this.src);">`;
+                dotsHTML += `<div class="simple-dot ${index === 0 ? 'active' : ''}" onclick="showCarouselImage(this, ${index})"></div>`;
+            });
+
+            return `
+                <div class="${carouselClass}">
+                    ${imagesHTML}
+                    <div class="simple-dots">
+                        ${dotsHTML}
+                    </div>
+                    ${isAd ? '<div class="ad-badge">Sponsored</div>' : ''}
+                </div>
+            `;
+        }
+
+        // Function to create media HTML based on type
+        function createMediaHTML(post) {
+            switch (post.type) {
+                case 'image':
+                    return `<img src="${post.media}" alt="Post" class="post-image">`;
+                
+                case 'video':
+                    const isAstrokobi = post.username === 'astrokobi';
+                    return `
+                        <div class="custom-video-container${post.isAd ? ' ad-video' : ''}${isAstrokobi ? ' astrokobi-video' : ''}">
+                            <video class="post-video" loop autoplay>
+                                <source src="${post.media}" type="video/mp4">
+                            </video>
+                            <div class="mute-toggle-overlay">
+                                <svg class="mute-toggle-icon" viewBox="0 0 24 24">
+                                    <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                                </svg>
+                            </div>
+                            ${post.isAd ? '<div class="ad-badge">Ad</div>' : ''}
+                        </div>
+                    `;
+                
+                case 'carousel':
+                    return createSimpleCarouselHTML(post.media, post.isAd, post.username);
+                
+                default:
+                    return `<img src="${post.media}" alt="Post" class="post-image">`;
+            }
+        }
+
+        // Function to generate a single post
+        function generatePost(post, templateId) {
+            const template = document.getElementById(templateId);
+            const postElement = template.cloneNode(true);
+            
+            // Remove the template class and ID
+            postElement.classList.remove('post-template');
+            postElement.removeAttribute('id');
+            
+            // Fill in the content
+            postElement.querySelector('.profile-pic img').src = post.profilePic;
+            postElement.querySelector('.username').textContent = post.username;
+            postElement.querySelector('.post-location').textContent = post.location;
+            postElement.querySelector('.likes-count').textContent = `${post.likes} likes`;
+            postElement.querySelector('.post-caption').innerHTML = `<strong>${post.username}</strong> ${post.caption}`;
+            postElement.querySelector('.post-comments').textContent = `View all ${post.comments} comments`;
+            postElement.querySelector('.post-timestamp').textContent = post.timestamp;
+            
+            // Insert media content
+            const mediaContainer = postElement.querySelector('.post-media');
+            mediaContainer.innerHTML = createMediaHTML(post);
+            
+            return postElement;
+        }
+
+        // Function to render posts for a specific feed
+        function renderPosts(data, containerId, templateId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // Clear existing posts
+            
+            data.forEach(post => {
+                const postElement = generatePost(post, templateId);
+                container.appendChild(postElement);
+            });
+            
+            // Initialize carousel swipe functionality and video observer after posts are rendered
+            setTimeout(() => {
+                initializeCarouselSwipe();
+                setupVideoObserver();
+                setupVideoMuteToggle();
+            }, 100);
+        }
+
+        // Simple carousel navigation function
+        function showCarouselImage(clickedDot, index) {
+            const carousel = clickedDot.closest('.simple-carousel, .raptv-carousel');
+            const images = carousel.querySelectorAll('img');
+            const dots = carousel.querySelectorAll('.simple-dot');
+            
+            // Hide all images and remove active from all dots
+            images.forEach(img => img.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // Show clicked image and activate clicked dot
+            images[index].classList.add('active');
+            clickedDot.classList.add('active');
+            
+            console.log('Switched to image', index);
+        }
+
+        // Function to navigate carousel programmatically
+        function navigateCarousel(carousel, direction) {
+            const images = carousel.querySelectorAll('img');
+            const dots = carousel.querySelectorAll('.simple-dot');
+            let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+            
+            if (direction === 'next' && currentIndex < images.length - 1) {
+                currentIndex++;
+            } else if (direction === 'prev' && currentIndex > 0) {
+                currentIndex--;
+            } else {
+                return; // No navigation needed
+            }
+            
+            // Hide all images and remove active from all dots
+            images.forEach(img => img.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // Show new image and activate corresponding dot
+            images[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
+            
+            console.log('Navigated to image', currentIndex);
+        }
+
+        // Initialize carousel swipe functionality
+        function initializeCarouselSwipe() {
+            const carousels = document.querySelectorAll('.simple-carousel, .raptv-carousel');
+            
+            carousels.forEach(carousel => {
+                let startX = 0;
+                let isDragging = false;
+                
+                // Touch events for mobile
+                carousel.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    isDragging = true;
+                }, { passive: true });
+                
+                carousel.addEventListener('touchend', (e) => {
+                    if (!isDragging) return;
+                    
+                    const endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+                    
+                    // Minimum swipe distance
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) {
+                            // Swiped left - next image
+                            navigateCarousel(carousel, 'next');
+                        } else {
+                            // Swiped right - previous image
+                            navigateCarousel(carousel, 'prev');
+                        }
+                    }
+                    
+                    isDragging = false;
+                }, { passive: true });
+                
+                // Mouse events for desktop
+                carousel.addEventListener('mousedown', (e) => {
+                    startX = e.clientX;
+                    isDragging = true;
+                    e.preventDefault(); // Prevent image drag
+                });
+                
+                carousel.addEventListener('mouseup', (e) => {
+                    if (!isDragging) return;
+                    
+                    const endX = e.clientX;
+                    const diff = startX - endX;
+                    
+                    // Minimum drag distance
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) {
+                            // Dragged left - next image
+                            navigateCarousel(carousel, 'next');
+                        } else {
+                            // Dragged right - previous image
+                            navigateCarousel(carousel, 'prev');
+                        }
+                    }
+                    
+                    isDragging = false;
+                });
+                
+                // Prevent context menu on long press
+                carousel.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                });
+                
+                // Reset dragging state on mouse leave
+                carousel.addEventListener('mouseleave', () => {
+                    isDragging = false;
+                });
+            });
+        }
+
+        // Navigation functions
+        function showHome() {
+            document.getElementById('homePage').style.display = 'flex';
+            document.getElementById('carouselFeed').classList.remove('active');
+            document.getElementById('videoFeed').classList.remove('active');
+        }
+
+        function showCarouselFeed() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('carouselFeed').classList.add('active');
+            document.getElementById('videoFeed').classList.remove('active');
+            
+            // Render carousel feed if not already rendered
+            if (document.getElementById('carouselPostsContainer').children.length === 0) {
+                renderPosts(carouselFeedData, 'carouselPostsContainer', 'postTemplate');
+            }
+        }
+
+        function showVideoFeed() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('carouselFeed').classList.remove('active');
+            document.getElementById('videoFeed').classList.add('active');
+            
+            // Render video feed if not already rendered
+            if (document.getElementById('videoPostsContainer').children.length === 0) {
+                renderPosts(videoFeedData, 'videoPostsContainer', 'videoPostTemplate');
+            }
+        }
+
+        // Video control functions
+        function setupVideoMuteToggle() {
+            document.querySelectorAll('.custom-video-container').forEach(container => {
+                container.addEventListener('click', (e) => {
+                    // Don't trigger if clicking on action buttons or other interactive elements
+                    if (e.target.closest('.post-actions') || e.target.closest('.post-header') || e.target.closest('.post-footer')) {
+                        return;
+                    }
+                    
+                    const video = container.querySelector('.post-video');
+                    const toggleOverlay = container.querySelector('.mute-toggle-overlay');
+                    const toggleIcon = container.querySelector('.mute-toggle-icon');
+                    
+                    if (video && toggleOverlay && toggleIcon) {
+                        // Toggle mute state
+                        if (video.muted) {
+                            video.muted = false;
+                            toggleIcon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+                        } else {
+                            video.muted = true;
+                            toggleIcon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M1 1l22 22"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+                        }
+                        
+                        // Show toggle overlay
+                        toggleOverlay.classList.add('show');
+                        
+                        // Hide after 1.5 seconds
+                        setTimeout(() => {
+                            toggleOverlay.classList.remove('show');
+                        }, 1500);
+                    }
+                });
+            });
+        }
+
+
+
+        // Video visibility observer
+        function setupVideoObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    if (entry.isIntersecting) {
+                        // Video is visible, play it
+                        video.play().catch(e => console.log('Video play failed:', e));
+                    } else {
+                        // Video is not visible, pause it
+                        video.pause();
+                    }
+                });
+            }, {
+                threshold: 0.5 // Video must be 50% visible to play
+            });
+
+            // Observe all videos
+            document.querySelectorAll('.post-video').forEach(video => {
+                observer.observe(video);
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Home page is shown by default
+        });
+    </script>
+</body>
+</html> 
