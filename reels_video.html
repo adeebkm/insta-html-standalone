@@ -885,7 +885,7 @@ Out now on all platforms 💙</div>
         const container = document.getElementById('reels-container');
         container.addEventListener('scroll', () => {
             const scrollTop = container.scrollTop;
-            const reelHeight = window.innerHeight;
+            const reelHeight = window.innerHeight - 60; // Account for header height
             const newCurrentReel = Math.floor(scrollTop / reelHeight) + 1;
             
             console.log(`Scroll event: scrollTop=${scrollTop}, reelHeight=${reelHeight}, newCurrentReel=${newCurrentReel}`);
@@ -967,31 +967,6 @@ Out now on all platforms 💙</div>
             videos.forEach(video => {
                 video.pause();
                 video.muted = true;
-            });
-            
-            // Create video observer for precise play/pause control
-            const videoObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const video = entry.target;
-                    const reel = video.closest('.reel');
-                    const reelNumber = reel ? parseInt(reel.getAttribute('data-reel')) : 0;
-                    
-                    if (entry.isIntersecting && reelNumber === currentReel) {
-                        // Only play if this is the current active reel and it's intersecting
-                        video.play().catch(e => console.log('Video play failed:', e));
-                    } else {
-                        // Pause if not intersecting or not the current reel
-                        video.pause();
-                    }
-                });
-            }, {
-                threshold: 0.7, // Higher threshold for more precise detection
-                rootMargin: '0px'
-            });
-            
-            // Observe all videos
-            videos.forEach(video => {
-                videoObserver.observe(video);
             });
             
             // Handle tap to start
