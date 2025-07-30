@@ -969,6 +969,31 @@ Out now on all platforms 💙</div>
                 video.muted = true;
             });
             
+            // Create video observer for precise play/pause control
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    const reel = video.closest('.reel');
+                    const reelNumber = reel ? parseInt(reel.getAttribute('data-reel')) : 0;
+                    
+                    if (entry.isIntersecting && reelNumber === currentReel) {
+                        // Only play if this is the current active reel and it's intersecting
+                        video.play().catch(e => console.log('Video play failed:', e));
+                    } else {
+                        // Pause if not intersecting or not the current reel
+                        video.pause();
+                    }
+                });
+            }, {
+                threshold: 0.7, // Higher threshold for more precise detection
+                rootMargin: '0px'
+            });
+            
+            // Observe all videos
+            videos.forEach(video => {
+                videoObserver.observe(video);
+            });
+            
             // Handle tap to start
             tapToStartOverlay.addEventListener('click', () => {
                 // Hide the overlay
