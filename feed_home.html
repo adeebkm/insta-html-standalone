@@ -1321,11 +1321,13 @@
             
             carousels.forEach(carousel => {
                 let startX = 0;
+                let startY = 0;
                 let isDragging = false;
                 
                 // Touch events for mobile
                 carousel.addEventListener('touchstart', (e) => {
                     startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
                     isDragging = true;
                 }, { passive: true });
                 
@@ -1333,11 +1335,16 @@
                     if (!isDragging) return;
                     
                     const endX = e.changedTouches[0].clientX;
-                    const diff = startX - endX;
+                    const endY = e.changedTouches[0].clientY;
+                    const diffX = startX - endX;
+                    const diffY = startY - endY;
                     
-                    // Minimum swipe distance
-                    if (Math.abs(diff) > 50) {
-                        if (diff > 0) {
+                    // Only trigger if it's clearly a horizontal swipe (2x more horizontal than vertical)
+                    if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 2) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        if (diffX > 0) {
                             // Swiped left - next image
                             navigateCarousel(carousel, 'next');
                         } else {
@@ -1347,11 +1354,12 @@
                     }
                     
                     isDragging = false;
-                }, { passive: true });
+                }, { passive: false });
                 
                 // Mouse events for desktop
                 carousel.addEventListener('mousedown', (e) => {
                     startX = e.clientX;
+                    startY = e.clientY;
                     isDragging = true;
                     e.preventDefault(); // Prevent image drag
                 });
@@ -1360,11 +1368,16 @@
                     if (!isDragging) return;
                     
                     const endX = e.clientX;
-                    const diff = startX - endX;
+                    const endY = e.clientY;
+                    const diffX = startX - endX;
+                    const diffY = startY - endY;
                     
-                    // Minimum drag distance
-                    if (Math.abs(diff) > 50) {
-                        if (diff > 0) {
+                    // Only trigger if it's clearly a horizontal drag (2x more horizontal than vertical)
+                    if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 2) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        if (diffX > 0) {
                             // Dragged left - next image
                             navigateCarousel(carousel, 'next');
                         } else {
